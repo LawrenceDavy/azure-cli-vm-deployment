@@ -264,7 +264,7 @@ Verify the VM is accessible.
 
 ### Step 8: Clean Up Resources
 
-Avoid unnecessary costs by deleting resources.
+Avoid unnecessary costs by deleting resources by running this cleanup script [`clean-up.sh`](clean-up.sh) 
 
 1. **Delete the Resource Group**:
    - Command:

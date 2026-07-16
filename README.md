@@ -1,3 +1,7 @@
+# Re-validated: July 2026
+
+---
+
 # Azure CLI Virtual Machine Deployment with Networking and Monitoring
 
 ---

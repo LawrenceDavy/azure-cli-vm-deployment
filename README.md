@@ -181,11 +181,12 @@ Deploy a VM with a public IP for external access.
        --name "MyUbuntuVM" \
        --image "Ubuntu2204" \
        --admin-username "azureuser" \
-       --generate-ssh-keys \
+       --ssh-key-values ~/.ssh/id_rsa.pub \
        --vnet-name "MyVNet" \
        --subnet "MySubnet" \
        --public-ip-sku "Standard" \
-       --location "eastus"
+       --location "eastus" \
+       --size "Standard_D2s_v3"
      ```
    - Explanation: This creates an Ubuntu VM, auto-generates SSH keys, and assigns a public IP.
    - ![Image](https://github.com/user-attachments/assets/b6f87739-2c05-4236-8bf0-7ef6b7c2c3a6)

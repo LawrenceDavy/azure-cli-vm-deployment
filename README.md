@@ -179,7 +179,7 @@ Deploy a VM with a public IP for external access.
      az vm create \
        --resource-group "MyResourceGroup" \
        --name "MyUbuntuVM" \
-       --image "UbuntuLTS" \
+       --image "Ubuntu2204" \
        --admin-username "azureuser" \
        --generate-ssh-keys \
        --vnet-name "MyVNet" \

@@ -295,16 +295,16 @@ Issue 2: vCPU Quota Exceeded
 - Action: Implemented a cleanup script to deallocate resources when not in use.
 - Takeaway: Always include cost controls in infrastructure-as-code projects.
 
+---
+
+### Automated Deployment Script
+
+An automation script `deploy-vm.sh` is included in this repository. It executes the entire deployment end-to-end using the Azure CLI.
+
+## Usage
+```bash
+chmod +x deploy-vm.sh
+./deploy-vm.sh
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/addition`).
-3. Commit changes (`git commit -m "Add feature"`).
-4. Push to the branch (`git push origin feature/addition`).
-5. Open a pull request.
-
----

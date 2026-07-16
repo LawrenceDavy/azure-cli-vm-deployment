@@ -41,7 +41,7 @@ This project aligns with AZ-900 domains:
 This project demonstrates how to use the Azure CLI to:
 - Provision a resource group and virtual network with a subnet.
 - Configure a network security group (NSG) for secure access.
-- Deploy a Linux VM (Ubuntu 20.04 LTS).
+- Deploy a Linux VM (Ubuntu 22.04 LTS).
 - Set up basic monitoring using Azure Monitor.
 - Test connectivity via SSH.
 - Clean up resources to avoid unnecessary costs.
@@ -297,7 +297,7 @@ Issue 2: vCPU Quota Exceeded
 
 ---
 
-### Automated Deployment Script
+# Automated Deployment Script
 
 An automation script `deploy-vm.sh` is included in this repository. It executes the entire deployment end-to-end using the Azure CLI.
 

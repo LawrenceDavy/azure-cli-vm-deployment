@@ -262,12 +262,22 @@ Verify the VM is accessible.
 
 ---
 
-### Step 8: Clean Up Resources
 
-Avoid unnecessary costs by deleting resources by running this cleanup script [`cleanup.sh`](cleanup.sh) 
+## Step 8: Clean Up Resources
 
-1. **Delete the Resource Group**:
-   - Command:
+To avoid ongoing Azure costs, delete all resources created by this project by running this cleanup script [`cleanup.sh`](cleanup.sh)
+
+### Option 1: Automated Cleanup (Recommended)
+
+The repository includes an automated cleanup script:
+
+```bash
+chmod +x cleanup.sh
+./cleanup.sh
+
+### Option 2: Manual Cleanup
+
+- Command:
      ```bash
      az group delete --name "MyResourceGroup" --yes --no-wait
      ```
@@ -275,6 +285,8 @@ Avoid unnecessary costs by deleting resources by running this cleanup script [`c
    - ![Image](https://github.com/user-attachments/assets/04caf991-3384-47d6-b463-189035aac069)
 
 ---
+
+----
 
 # Troubleshooting & Lessons Learned
 

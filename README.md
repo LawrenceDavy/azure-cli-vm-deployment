@@ -297,11 +297,11 @@ Issue 2: vCPU Quota Exceeded
 
 ---
 
-# Automated Deployment Script
+## Automated Deployment Script
 
-An automation script `deploy-vm.sh` is included in this repository. It executes the entire deployment end-to-end using the Azure CLI.
+An automation script [`deploy-vm.sh`](deploy-vm.sh) is included in this repository. It executes the entire deployment end-to-end using the Azure CLI.
 
-## Usage
+### Usage
 ```bash
 chmod +x deploy-vm.sh
 ./deploy-vm.sh

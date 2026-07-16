@@ -276,6 +276,28 @@ Avoid unnecessary costs by deleting resources.
 
 ---
 
+# Troubleshooting & Lessons Learned
+
+Issue 1: Ubuntu Image Not Found
+   - Symptom: VM creation failed with ResourceNotFound for Microsoft.Compute/images/UbuntuLTS.
+   - Root Cause: Used an outdated image alias UbuntuLTS that is no longer valid in the current API.
+   - Resolution: Updated the --image parameter to Ubuntu2204 to reference a supported image.
+   - Takeaway: Always validate available VM images with az vm image list or refer to the latest Azure documentation; image aliases can change over time.
+
+Issue 2: vCPU Quota Exceeded
+   - Symptom: Deployment validation failed with QuotaExceeded for the standardDSv5Family cores (limit: 0, required: 2).
+   - Root Cause: The default VM size falls under a Dsv5‑family SKU, and the subscription’s regional vCPU quota for that family was zero.
+   - Resolution: Requested a quota increase via the Azure portal, and as an immediate workaround switched to a different VM size (Standard_D2s_v3) from the Dsv3 family that had available quota.
+   - Takeaway: Check subscription quotas before deploying resources. Use az vm list-usage --location <region> to review current limits, and consider selecting a VM size from a different family if quota is insufficient.
+
+## Cost Management
+- Lesson: Running VMs 24/7 incurs significant costs.
+- Action: Implemented a cleanup script to deallocate resources when not in use.
+- Takeaway: Always include cost controls in infrastructure-as-code projects.
+
+
+---
+
 ## Contributing
 
 Contributions are welcome! Please:

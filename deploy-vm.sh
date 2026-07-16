@@ -9,6 +9,7 @@ ADMIN_USER="azureuser"
 VNET_NAME="MyVNet"
 SUBNET_NAME="MySubnet"
 NSG_NAME="MyNSG"
+MY_IP="$(curl -s https://ifconfig.me)/32"
 # -------------------------------------------
 
 echo "Starting Azure VM Deployment..."
@@ -46,7 +47,8 @@ az network nsg rule create \
   --priority 1000 \
   --destination-port-range "22" \
   --access "Allow" \
-  --direction "Inbound"
+  --direction "Inbound" \
+  --source-address-prefixes "$MY_IP"
 
 az network vnet subnet update \
   --resource-group "$RESOURCE_GROUP" \
@@ -67,6 +69,7 @@ az vm create \
   --public-ip-sku "Standard" \
   --location "$LOCATION" \
   --size "Standard_D2s_v3"
+  --nsg ""
 
 # 5. Fetch the Public IP
 echo "Deployment complete! Your public IP is:"

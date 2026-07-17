@@ -1,3 +1,4 @@
+
 # Re-validated: July 2026
 
 ---
@@ -76,8 +77,7 @@ Before starting, ensure you have the following:
      ```bash
      az login
      ```
-  ![Image](https://github.com/user-attachments/assets/e608ded9-8afc-45fa-a2ae-3a254d23d502)
-
+   ![Image](https://github.com/user-attachments/assets/e608ded9-8afc-45fa-a2ae-3a254d23d502)
 
 ---
 
@@ -91,7 +91,8 @@ A resource group is a logical container for Azure resources.
      az group create --name "MyResourceGroup" --location "eastus"
      ```
    - Explanation: `eastus` is chosen for proximity (adjust based on your region). Replace `MyResourceGroup` with a unique name.
-  ![Image](https://github.com/user-attachments/assets/a993b7bf-6a78-4c25-a4b9-c347558bd82c)
+   ![Image](https://github.com/user-attachments/assets/a993b7bf-6a78-4c25-a4b9-c347558bd82c)
+
 ---
 
 ### Step 3: Create a Virtual Network (VNet) and Subnet
@@ -120,7 +121,7 @@ Networking is critical for VM communication.
        --address-prefix "10.0.1.0/24"
      ```
    - Explanation: The subnet is a smaller IP range within the VNet for the VM.
-  ![Image](https://github.com/user-attachments/assets/28e349c5-a770-4f14-8d76-6ee0a4a87e8f)
+   ![Image](https://github.com/user-attachments/assets/28e349c5-a770-4f14-8d76-6ee0a4a87e8f)
 
 ---
 
@@ -136,8 +137,8 @@ An NSG controls inbound and outbound traffic.
        --name "MyNSG" \
        --location "eastus"
      ```
-  ![Image](https://github.com/user-attachments/assets/8f93edf6-4868-4a14-ba4e-dfebbfdf7406)
-  ![Image](https://github.com/user-attachments/assets/4a7eb15a-9c0e-450c-9de5-cef3d943b33d)
+   ![Image](https://github.com/user-attachments/assets/8f93edf6-4868-4a14-ba4e-dfebbfdf7406)
+   ![Image](https://github.com/user-attachments/assets/4a7eb15a-9c0e-450c-9de5-cef3d943b33d)
 
 2. **Add a Rule to Allow SSH**:
    - Command:
@@ -153,7 +154,7 @@ An NSG controls inbound and outbound traffic.
        --direction "Inbound"
      ```
    - Explanation: Port 22 is opened for SSH access.
-  ![Image](https://github.com/user-attachments/assets/50501cc3-daba-44bc-8ef4-838af9b84f0b)
+   ![Image](https://github.com/user-attachments/assets/50501cc3-daba-44bc-8ef4-838af9b84f0b)
 
 3. **Associate NSG with Subnet**:
    - Command:
@@ -165,7 +166,6 @@ An NSG controls inbound and outbound traffic.
        --network-security-group "MyNSG"
      ```
    - ![image](https://github.com/user-attachments/assets/0c61d0a7-a92e-4192-971f-b5fc0adae1d9)
-
 
 ---
 
@@ -203,7 +203,6 @@ Deploy a VM with a public IP for external access.
      ```
    - ![image](https://github.com/user-attachments/assets/c688f6ef-3a69-4264-abee-03e82704cbdf)
 
-
 ---
 
 ### Step 6: Enable Monitoring with Azure Monitor
@@ -218,7 +217,7 @@ Monitoring ensures VM performance visibility.
        --name "MyUbuntuVM"
      ```
    - Explanation: Captures boot logs for troubleshooting.
-![Image](https://github.com/user-attachments/assets/6c5e139e-a78d-47c7-8f62-964b0c2fa612)
+   ![Image](https://github.com/user-attachments/assets/6c5e139e-a78d-47c7-8f62-964b0c2fa612)
 
 2. **Install Azure Monitor Agent** (optional, requires extension):
    - Command:
@@ -262,45 +261,43 @@ Verify the VM is accessible.
 
 ---
 
+### Step 8: Clean Up Resources
 
-## Step 8: Clean Up Resources
+To avoid ongoing Azure costs, delete all resources created by this project.
 
-To avoid ongoing Azure costs, delete all resources created by this project by running this cleanup script [`cleanup.sh`](cleanup.sh)
+#### Option 1: Automated Cleanup (Recommended)
 
-### Option 1: Automated Cleanup (Recommended)
-
-The repository includes an automated cleanup script:
+The repository includes an automated cleanup script [`cleanup.sh`](cleanup.sh):
 
 ```bash
 chmod +x cleanup.sh
 ./cleanup.sh
+```
 
-### Option 2: Manual Cleanup
+#### Option 2: Manual Cleanup
 
 - Command:
-     ```bash
-     az group delete --name "MyResourceGroup" --yes --no-wait
-     ```
-   - Explanation: `--yes` skips confirmation; `--no-wait` runs in the background.
-   - ![Image](https://github.com/user-attachments/assets/04caf991-3384-47d6-b463-189035aac069)
+  ```bash
+  az group delete --name "MyResourceGroup" --yes --no-wait
+  ```
+- Explanation: `--yes` skips confirmation; `--no-wait` runs in the background.
+- ![Image](https://github.com/user-attachments/assets/04caf991-3384-47d6-b463-189035aac069)
 
 ---
 
-----
-
 # Troubleshooting & Lessons Learned
 
-Issue 1: Ubuntu Image Not Found
+**Issue 1: Ubuntu Image Not Found**
    - Symptom: VM creation failed with ResourceNotFound for Microsoft.Compute/images/UbuntuLTS.
    - Root Cause: Used an outdated image alias UbuntuLTS that is no longer valid in the current API.
-   - Resolution: Updated the --image parameter to Ubuntu2204 to reference a supported image.
-   - Takeaway: Always validate available VM images with az vm image list or refer to the latest Azure documentation; image aliases can change over time.
+   - Resolution: Updated the `--image` parameter to `Ubuntu2204` to reference a supported image.
+   - Takeaway: Always validate available VM images with `az vm image list` or refer to the latest Azure documentation; image aliases can change over time.
 
-Issue 2: vCPU Quota Exceeded
+**Issue 2: vCPU Quota Exceeded**
    - Symptom: Deployment validation failed with QuotaExceeded for the standardDSv5Family cores (limit: 0, required: 2).
    - Root Cause: The default VM size falls under a Dsv5‑family SKU, and the subscription’s regional vCPU quota for that family was zero.
-   - Resolution: Requested a quota increase via the Azure portal, and as an immediate workaround switched to a different VM size (Standard_D2s_v3) from the Dsv3 family that had available quota.
-   - Takeaway: Check subscription quotas before deploying resources. Use az vm list-usage --location <region> to review current limits, and consider selecting a VM size from a different family if quota is insufficient.
+   - Resolution: Requested a quota increase via the Azure portal, and as an immediate workaround switched to a different VM size (`Standard_D2s_v3`) from the Dsv3 family that had available quota.
+   - Takeaway: Check subscription quotas before deploying resources. Use `az vm list-usage --location <region>` to review current limits, and consider selecting a VM size from a different family if quota is insufficient.
 
 ## Cost Management
 - Lesson: Running VMs 24/7 incurs significant costs.
@@ -317,6 +314,6 @@ An automation script [`deploy-vm.sh`](deploy-vm.sh) is included in this reposito
 ```bash
 chmod +x deploy-vm.sh
 ./deploy-vm.sh
+```
 
 ---
-

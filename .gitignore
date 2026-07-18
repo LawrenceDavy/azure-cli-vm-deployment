@@ -1,0 +1,23 @@
+# Azure CLI
+.azure/
+*.azcli
+
+# SSH keys
+*.pem
+*.pub
+*.key
+
+# Local logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Shell backup files
+*.swp
+*.swo
+*~
+
+# Script outputs (if any)
+*.out

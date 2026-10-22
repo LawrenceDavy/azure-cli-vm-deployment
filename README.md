@@ -22,7 +22,7 @@ This remains an infrastructure project. Its value is proof of systems thinking a
 - Bash (deploy and clean-up scripts)
 
 ## AI assistance
-None used for the core deployment or documentation.
+The original lab deployment and initial project notes were completed without AI assistance. Documentation and script maintenance changes in October 2026 were prepared with AI assistance and require my own review and validation.
 
 ---
 
@@ -76,6 +76,7 @@ Before starting, ensure you have the following:
 - **Azure Subscription**: Sign up for a [free Azure account](https://azure.microsoft.com/free/) if you don’t have one.
 - **Azure CLI**: Installed locally or accessible via Azure Cloud Shell. [Install instructions](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 - **SSH Client**: For Linux/Mac, use the terminal; for Windows, use PuTTY or Windows Terminal.
+- **For the automated script**: `curl`, an existing `~/.ssh/id_rsa.pub` public key, and an authenticated Azure CLI session (`az login`). Review the resource names and region before running.
 - **Text Editor**: For scripting (e.g., VS Code).
 - **Basic CLI Knowledge**: Familiarity with command-line syntax.
 
@@ -171,10 +172,11 @@ An NSG controls inbound and outbound traffic.
        --protocol "Tcp" \
        --priority 1000 \
        --destination-port-range "22" \
+       --source-address-prefixes "$(curl --fail --silent --show-error --ipv4 https://ifconfig.me)/32" \
        --access "Allow" \
        --direction "Inbound"
      ```
-   - Explanation: Port 22 is opened for SSH access.
+   - Explanation: Port 22 is permitted only from your current public IPv4 address. If your IP changes, update the rule. This is a lab configuration, not a production network design.
    ![Image](https://github.com/user-attachments/assets/50501cc3-daba-44bc-8ef4-838af9b84f0b)
 
 3. **Associate NSG with Subnet**:
@@ -207,9 +209,10 @@ Deploy a VM with a public IP for external access.
        --subnet "MySubnet" \
        --public-ip-sku "Standard" \
        --location "eastus" \
-       --size "Standard_D2s_v3"
+       --size "Standard_D2s_v3" \
+       --nsg ""
      ```
-   - Explanation: This creates an Ubuntu VM, auto-generates SSH keys, and assigns a public IP.
+   - Explanation: This uses an existing SSH public key, creates a VM with a public IP, and avoids adding a second VM-level NSG; the subnet NSG controls traffic.
    - ![Image](https://github.com/user-attachments/assets/b6f87739-2c05-4236-8bf0-7ef6b7c2c3a6)
 
 2. **Retrieve Public IP**:
@@ -250,7 +253,7 @@ Monitoring ensures VM performance visibility.
        --publisher "Microsoft.Azure.Monitor" \
        --version "1.0"
      ```
-   - Explanation: Collects performance metrics (CPU, memory, etc.).
+   - Explanation: Installs the monitoring agent. Collection of guest telemetry additionally requires a Data Collection Rule and association; the agent alone is not full end-to-end monitoring.
    - ![Image](https://github.com/user-attachments/assets/7413ea5f-6f32-4309-9dca-d2a50a8d0905)
 
 ---
@@ -322,16 +325,18 @@ chmod +x cleanup.sh
 
 ## Cost Management
 - Lesson: Running VMs 24/7 incurs significant costs.
-- Action: Implemented a cleanup script to deallocate resources when not in use.
+- Action: Added a confirmation-based cleanup script that **deletes the entire project resource group**. It does not merely stop or deallocate the VM; use a dedicated resource group.
 - Takeaway: Always include cost controls in infrastructure-as-code projects.
 
 ---
 
 ## Automated Deployment Script
 
-An automation script [`deploy-vm.sh`](deploy-vm.sh) is included in this repository. It executes the entire deployment end-to-end using the Azure CLI.
+An automation script [`deploy-vm.sh`](deploy-vm.sh) creates the project network, NSG rules and Linux VM using the Azure CLI. Boot diagnostics and the Azure Monitor agent are covered separately in Step 6; they are **not** configured by this script. The script has not been re-run against a live Azure subscription as part of this documentation cleanup.
 
 ### Usage
+**Before running:** check your subscription, VM quota and expected costs. The script creates billable resources, uses your existing `~/.ssh/id_rsa.pub` key and restricts SSH to your current public IPv4 address. Use a dedicated resource group, because `cleanup.sh` deletes the entire group.
+
 ```bash
 chmod +x deploy-vm.sh
 ./deploy-vm.sh

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # --- Variables (Change these to deploy anywhere) ---
 RESOURCE_GROUP="MyResourceGroup"
@@ -9,8 +9,14 @@ ADMIN_USER="azureuser"
 VNET_NAME="MyVNet"
 SUBNET_NAME="MySubnet"
 NSG_NAME="MyNSG"
-MY_IP="$(curl -s https://ifconfig.me)/32"
+MY_IP="$(curl --fail --silent --show-error --ipv4 https://ifconfig.me)/32"
 # -------------------------------------------
+
+# Check prerequisites before creating billable Azure resources.
+command -v az >/dev/null || { echo "Azure CLI is required." >&2; exit 1; }
+command -v curl >/dev/null || { echo "curl is required to restrict SSH access." >&2; exit 1; }
+az account show >/dev/null || { echo "Log in using az login first." >&2; exit 1; }
+[[ -f "$HOME/.ssh/id_rsa.pub" ]] || { echo "Missing $HOME/.ssh/id_rsa.pub. Create an SSH key first." >&2; exit 1; }
 
 echo "Starting Azure VM Deployment..."
 
@@ -68,7 +74,7 @@ az vm create \
   --subnet "$SUBNET_NAME" \
   --public-ip-sku "Standard" \
   --location "$LOCATION" \
-  --size "Standard_D2s_v3"
+  --size "Standard_D2s_v3" \
   --nsg ""
 
 # 5. Fetch the Public IP

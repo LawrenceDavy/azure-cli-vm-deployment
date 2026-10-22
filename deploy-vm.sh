@@ -9,7 +9,6 @@ ADMIN_USER="azureuser"
 VNET_NAME="MyVNet"
 SUBNET_NAME="MySubnet"
 NSG_NAME="MyNSG"
-MY_IP="$(curl --fail --silent --show-error --ipv4 https://ifconfig.me)/32"
 # -------------------------------------------
 
 # Check prerequisites before creating billable Azure resources.
@@ -17,6 +16,7 @@ command -v az >/dev/null || { echo "Azure CLI is required." >&2; exit 1; }
 command -v curl >/dev/null || { echo "curl is required to restrict SSH access." >&2; exit 1; }
 az account show >/dev/null || { echo "Log in using az login first." >&2; exit 1; }
 [[ -f "$HOME/.ssh/id_rsa.pub" ]] || { echo "Missing $HOME/.ssh/id_rsa.pub. Create an SSH key first." >&2; exit 1; }
+MY_IP="$(curl --fail --silent --show-error --ipv4 https://ifconfig.me)/32"
 
 echo "Starting Azure VM Deployment..."
 

@@ -22,7 +22,7 @@ This remains an infrastructure project. Its value is proof of systems thinking a
 - Bash (deploy and clean-up scripts)
 
 ## AI assistance
-None used for the core deployment or documentation.
+The original lab deployment and initial project notes were completed without AI assistance. Documentation and script maintenance changes in October 2026 were prepared with AI assistance and require my own review and validation.
 
 ---
 
